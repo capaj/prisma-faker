@@ -71,19 +71,24 @@ export class Pool {
           config: {},
         },
       ]
-      const dbFolder = path.join(tmpDir, './db/')
 
       /* Occupy resource pool. */
       this.dbs.booting = [...this.dbs.booting, id]
 
-      /* Migrate Datamodel */
+      /* Migrate Datamodel. */
       const lift = new LiftEngine({
         projectDir: tmpDir,
       })
 
+      const datamodelDmmf = {
+        enums: [],
+        models: [],
+        ...this.dmmf.datamodel,
+      }
+
       const { datamodel } = await lift.convertDmmfToDml({
-        dmmf: JSON.stringify(this.dmmf.datamodel),
-        dataSources: datasources,
+        dmmf: JSON.stringify(datamodelDmmf),
+        config: { datasources, generators: [] },
       })
 
       const {
@@ -91,8 +96,9 @@ export class Pool {
         errors: stepErrors,
       } = await lift.inferMigrationSteps({
         migrationId: id,
-        dataModel: datamodel,
+        datamodel: datamodel,
         assumeToBeApplied: [],
+        sourceConfig: datamodel,
       })
 
       if (stepErrors.length > 0) {
@@ -103,6 +109,7 @@ export class Pool {
         force: true,
         migrationId: id,
         steps: datamodelSteps,
+        sourceConfig: datamodel,
       })
 
       if (errors.length > 0) {
@@ -112,6 +119,7 @@ export class Pool {
       const progress = () =>
         lift.migrationProgess({
           migrationId: id,
+          sourceConfig: datamodel,
         })
 
       while ((await progress()).status !== 'Success') {
