@@ -2,7 +2,7 @@
   "extends": "../../tsproject.json",
   "compilerOptions": {
     "rootDir": ".",
-    "outDir": "../../dist/packages/prisma-db-pool",
+    "outDir": "dist/",
     "composite": true,
     "declaration": true,
     "declarationMap": true
