@@ -836,7 +836,10 @@ export function seed<
      * Generates a unique identifier based on the database kind.
      */
     function getFixtureId(): ID {
-      return faker.guid().slice(0, 25)
+      return faker
+        .guid()
+        .replace(/\-/g, '')
+        .slice(0, 25)
     }
 
     /**
@@ -873,6 +876,22 @@ export function seed<
               default: {
                 const value = mock
                 return [pool, tasks, { ...acc, [field.name]: value }]
+              }
+            }
+          }
+
+          /* ID fields */
+
+          if (field.isId) {
+            switch (field.type) {
+              case 'ID': {
+                return [pool, tasks, { ...acc, [field.name]: id }]
+              }
+              case 'String': {
+                return [pool, tasks, { ...acc, [field.name]: id }]
+              }
+              case 'Int': {
+                throw new Error('Int @ids are not yet supported!')
               }
             }
           }
@@ -1293,6 +1312,10 @@ export function seed<
     opts: { silent: boolean } = { silent: false },
   ): Promise<object[]> {
     if (opts.silent) {
+      /**
+       * Create Map, reduce ID references, and return model-type based
+       * collection of instances.
+       */
       return _.sortBy(fixtures, f => f.order).map(f => f.data)
     } else {
       const photon = new Photon(photonOptions)
@@ -1305,9 +1328,14 @@ export function seed<
         >(async (acc, f) => {
           return acc.then(async res => {
             /* Create a single instance */
-            const seed = await photon[f.mapping.findMany]['create']({
-              data: f.data,
-            })
+            // TODO:
+            let seed
+            try {
+              seed = await photon[f.mapping.findMany]['create']({
+                data: f.data,
+              })
+            } catch (err) {}
+
             return res.concat(seed)
           })
         }, Promise.resolve([]))
