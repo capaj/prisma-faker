@@ -1,10 +1,15 @@
 {
-  "extends": "../../tsproject.json",
   "compilerOptions": {
     "rootDir": "src/",
     "outDir": "dist/",
-    "composite": true,
-    "declaration": true,
-    "declarationMap": true
-  }
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "noUnusedLocals": false,
+    "esModuleInterop": true,
+    "suppressExcessPropertyErrors": false,
+    "noFallthroughCasesInSwitch": true
+  },
+  "exclude": ["node_modules", "dist"]
 }

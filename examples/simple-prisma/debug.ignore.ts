@@ -29,7 +29,7 @@ async function run() {
         },
       }),
       {
-        silent: true,
+        persist: true,
       },
     )
 

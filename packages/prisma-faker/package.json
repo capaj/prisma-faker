@@ -1,7 +1,7 @@
 {
   "name": "@prisma/faker",
   "version": "1.0.0",
-  "main": "dist/src/index.js",
+  "main": "dist/index.js",
   "repository": "https://github.com/maticzav/prisma-faker.git",
   "author": "maticzav <matic.zavadlal@gmail.com>",
   "scripts": {

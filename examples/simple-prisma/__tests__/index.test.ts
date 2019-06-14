@@ -26,7 +26,7 @@ beforeAll(async () => {
       },
     }),
     {
-      silent: true,
+      persist: true,
     },
   )
 

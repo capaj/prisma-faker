@@ -15,7 +15,7 @@ import { withDefault } from './utils'
 
 export interface SeedOptions<PhotonOptions> {
   seed?: number
-  silent?: boolean
+  persist?: boolean
   instances?: number
   photon?: PhotonOptions
 }
@@ -43,7 +43,7 @@ export function seed<
 
   const opts = {
     seed: 42,
-    silent: false,
+    persist: true,
     instances: 5,
     ...__opts,
   }
@@ -65,7 +65,7 @@ export function seed<
   /* Creates Photon instance and pushes data. */
 
   const seeds = seedFixturesToDatabase(client.Photon, opts.photon, fixtures, {
-    silent: opts.silent,
+    persist: opts.persist,
   })
 
   return seeds
@@ -891,7 +891,8 @@ export function seed<
                 return [pool, tasks, { ...acc, [field.name]: id }]
               }
               case 'Int': {
-                throw new Error('Int @ids are not yet supported!')
+                // throw new Error('Int @ids are not yet supported!')
+                return [pool, tasks, { ...acc, [field.name]: id }]
               }
             }
           }
@@ -909,7 +910,7 @@ export function seed<
             }
             case 'Int': {
               const number = faker.integer({
-                min: -2147483647,
+                min: 1,
                 max: 2147483647,
               })
 
@@ -1299,7 +1300,7 @@ export function seed<
   }
 
   /**
-   * Seeds the fixtures to the database. Based on the `silent` option
+   * Seeds the fixtures to the database. Based on the `persist` option
    * it performs data push. Photon is provided globally.
    *
    * @param fixtures
@@ -1309,9 +1310,9 @@ export function seed<
     Photon: { new (opts: PhotonOptions): PhotonType },
     photonOptions: PhotonOptions,
     fixtures: Fixture[],
-    opts: { silent: boolean } = { silent: false },
+    opts: { persist: boolean } = { persist: true },
   ): Promise<object[]> {
-    if (opts.silent) {
+    if (!opts.persist) {
       /**
        * Create Map, reduce ID references, and return model-type based
        * collection of instances.
@@ -1331,18 +1332,39 @@ export function seed<
             // TODO:
             let seed
             try {
+              const { id, ...dataWithoutId } = f.data
               seed = await photon[f.mapping.findMany]['create']({
-                data: f.data,
+                data: dataWithoutId,
               })
-            } catch (err) {}
+            } catch (err) {
+              throw err
+            }
 
-            return res.concat(seed)
+            return res.concat({
+              data: seed,
+              model: f.mapping.model,
+            })
           })
         }, Promise.resolve([]))
 
         /* Internally executes the chain. */
-        const seeds = await actions
-        return seeds
+        const seeds: { data: any; model: string }[] = (await actions) as any
+        return seeds.reduce(
+          (acc, seed) => {
+            if (!Boolean(acc[seed.model])) {
+              return {
+                ...acc,
+                [`${seed.model}`]: [seed.data],
+              }
+            } else {
+              return {
+                ...acc,
+                [`${seed.model}`]: acc[seed.model].concat(seed.data),
+              }
+            }
+          },
+          {} as any,
+        )
       } catch (err) {
         throw err
       } finally {

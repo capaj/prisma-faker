@@ -52,7 +52,7 @@ test.only('authors are created correctly', async () => {
 
   const data = await seed(photon, schema, {
     photon: db,
-    silent: false,
+    persist: true,
   })
 
   console.log({ db, data: JSON.stringify(data) })
