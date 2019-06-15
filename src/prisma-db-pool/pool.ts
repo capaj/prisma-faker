@@ -13,6 +13,7 @@ export type PoolDefinition = {
 }
 
 export type DBInstance = {
+  url: string
   cwd: string
   datamodel: string
 }
@@ -123,6 +124,7 @@ export class Pool {
       this.dbs.booting = this.dbs.booting.filter(dbId => dbId !== id)
 
       const instance: DBInstance = {
+        url: `file:${tmpDir}/db.db`,
         cwd: tmpDir,
         datamodel: datamodel,
       }
