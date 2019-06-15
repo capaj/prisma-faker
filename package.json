@@ -1,33 +1,32 @@
 {
   "name": "prisma-test-utils",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "dist/index.js",
   "repository": "https://github.com/maticzav/prisma-faker.git",
   "author": "maticzav <matic.zavadlal@gmail.com>",
   "scripts": {
     "watch": "tsc -w",
     "build": "tsc",
-    "clean": "rm -rf ./node_modules/ && rm -rf ./*/node_modules/ && rm -rf dist/",
-    "prepublish": "yarn clean && yarn build"
+    "clean": "rm -rf ./node_modules/ && rm -rf ./*/node_modules/ && rm -rf dist/"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.133",
+    "@types/node": "^12.0.4",
     "chalk": "^2.4.2",
     "execa": "^1.0.0",
     "husky": "^2.3.0",
     "prettier": "^1.17.1",
     "pretty-quick": "^1.11.0",
     "ts-node": "^8.2.0",
-    "typescript": "^3.5.1",
-    "@types/lodash": "^4.14.133",
-    "@types/node": "^12.0.4"
+    "typescript": "^3.5.1"
   },
   "dependencies": {
+    "@prisma/lift": "^0.0.70",
+    "@prisma/photon": "^0.0.69",
     "@types/chance": "^1.0.4",
     "chance": "^1.0.18",
     "lodash": "^4.17.11",
-    "multilines": "^1.0.2",
-    "@prisma/photon": "^0.0.69",
-    "@prisma/lift": "^0.0.70"
+    "multilines": "^1.0.2"
   },
   "license": "MIT"
 }
