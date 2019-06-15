@@ -44,7 +44,7 @@ export function seed<
   const opts = {
     seed: 42,
     persist: true,
-    instances: 5,
+    instances: 100,
     ...__opts,
   }
 
