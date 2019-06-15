@@ -45,6 +45,18 @@ export class Pool {
     }
   }
 
+  async run<T>(fn: (db: DBInstance) => Promise<T>) {
+    const db = await this.getDBInstance()
+    try {
+      const result = await fn(db)
+      await this.releaseDBInstance(db)
+      return result
+    } catch (e) {
+      await this.releaseDBInstance(db)
+      throw e
+    }
+  }
+
   /**
    * Creates a new DB instances and lifts a migration.
    */
