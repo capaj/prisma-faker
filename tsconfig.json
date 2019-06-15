@@ -6,6 +6,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": true,
+    "declaration": true,
     "noUnusedLocals": false,
     "esModuleInterop": true,
     "suppressExcessPropertyErrors": false,
