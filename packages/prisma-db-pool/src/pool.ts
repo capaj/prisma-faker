@@ -115,7 +115,7 @@ export class Pool {
           sourceConfig: datamodel,
         })
 
-      while ((await progress()).status !== 'Success') {
+      while ((await progress()).status !== 'MigrationSuccess') {
         /* Just wait */
       }
 

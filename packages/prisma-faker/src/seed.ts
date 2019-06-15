@@ -1333,7 +1333,11 @@ export function seed<
             let seed
             try {
               const { id, ...dataWithoutId } = f.data
-              seed = await photon[f.mapping.findMany]['create']({
+              // console.log(`photon[${f.mapping.findMany}]['create']({
+              //   data: ${JSON.stringify(dataWithoutId)},
+              // })`)
+              // console.log({ mapping: f.mapping })
+              seed = await photon[(f.mapping as any).plural]['create']({
                 data: dataWithoutId,
               })
             } catch (err) {
