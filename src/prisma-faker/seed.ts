@@ -1372,7 +1372,7 @@ export function seed<
       } catch (err) {
         throw err
       } finally {
-        photon.disconnect()
+        await photon.disconnect()
       }
     }
   }
