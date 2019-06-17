@@ -1,6 +1,6 @@
 {
   "name": "prisma-test-utils",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "main": "dist/index.js",
   "repository": "https://github.com/maticzav/prisma-faker.git",
   "author": "maticzav <matic.zavadlal@gmail.com>",
