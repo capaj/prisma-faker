@@ -1,3 +1,7 @@
+# Deprecated
+
+use https://github.com/luisrudge/prisma-generator-fake-data instead. This project is not maintained anymore.
+
 # prisma-test-utils
 
 ## Example
